@@ -3,10 +3,14 @@ import {colorMapping} from '@/helpers/colorMapping'
 type ReturnWhat = 'dmc' | 'flossName' | 'hexCode' | 'all'
 type InputWhat = 'dmc' | 'flossName' | 'hexCode'
 
-export const findColor = (inputStr: string, inputWhat: InputWhat, returnWhat: ReturnWhat) => {
+export const findColor = (inputStr: string|undefined, inputWhat: InputWhat, returnWhat: ReturnWhat): undefined | string => {
+    if (!inputStr) {
+        return undefined
+    }
+
     const colorObj = colorMapping.find(color => (color[inputWhat] === inputStr))
 
-    if (!colorObj) {
+    if (!colorObj || !['dmc','flossName','hexCode','all'].includes(returnWhat)) {
         return undefined
     }
 
@@ -17,5 +21,5 @@ export const findColor = (inputStr: string, inputWhat: InputWhat, returnWhat: Re
     } else if (returnWhat === 'hexCode') {
         return colorObj.hexCode
     }
-    return colorObj
+    return undefined
 }

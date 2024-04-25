@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import DataCard, { Item } from '../components/DataCard';
 import Image from 'next/image'
+import {id} from 'postcss-selector-parser'
 
 const Home: React.FC = () => {
     const [items, setItems] = useState<Item[]>([
@@ -27,15 +28,20 @@ const Home: React.FC = () => {
     const addItem = () => {
         const updatedItems = [
             {
-                id: undefined,
+                id: items.length + 1,
                 dmcNumber: undefined,
                 numberOfSpoolsInStock: 0,
                 needToReStock: false,
-                hexColor: undefined,
+                hexColor: '#ffffff',
                 name: '',
                 isEditing: true
             },
             ...items]
+        setItems(updatedItems)
+    }
+
+    const deleteItem = (idToBeDeleted: number) => {
+        const updatedItems = items.filter(item => item.id !== idToBeDeleted)
         setItems(updatedItems)
     }
 
@@ -46,12 +52,12 @@ const Home: React.FC = () => {
                        src={'/logo.png'} width={150} height={150}/>
                 <h1 className='text-7xl text-justify my-auto font-semibold'>ThreadStacks</h1>
             </div>
-            <div className="flex flex-wrap m-10">
+            <div className="flex flex-wrap content-center m-10">
                 <div className="p-3 m-3 border border-indigo-400 rounded w-48 h-48 aspect-square" onClick={addItem}>
-                    <div className="text-9xl text-gray-300 text-center mx-auto">+</div>
+                    <div className="text-9xl text-gray-300 text-center mx-auto mt-2 cursor-grab">+</div>
                 </div>
                 {items.map(item => (
-                    <DataCard key={item.id} data={item} onSave={saveItem}/>
+                    <DataCard key={item.id} data={item} onSave={saveItem} onDelete={deleteItem}/>
                 ))}
             </div>
         </>
